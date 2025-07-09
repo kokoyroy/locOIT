@@ -1,0 +1,262 @@
+.app-container {
+  padding: 16px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  max-width: 100%;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.app-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding: 16px;
+  background: linear-gradient(135deg, #0078d4, #106ebe);
+  color: white;
+  border-radius: 8px;
+}
+
+.app-header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+  flex: 1;
+}
+
+.status-indicator {
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.status-indicator.ready {
+  background: rgba(16, 124, 16, 0.9);
+  border-color: #4caf50;
+}
+
+.status-indicator.loading {
+  background: rgba(255, 152, 0, 0.9);
+  border-color: #ff9800;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+.app-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.debug-section,
+.email-section,
+.actions-section,
+.log-section,
+.loading-section {
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.debug-section h3,
+.email-section h3,
+.actions-section h3,
+.log-section h3 {
+  margin: 0 0 16px 0;
+  color: #323130;
+}
+
+.debug-info {
+  padding: 12px;
+  background: #f3f2f1;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  color: #323130;
+  border-left: 4px solid #0078d4;
+}
+
+.email-info p {
+  margin: 8px 0;
+  padding: 8px;
+  background: #f9f9f9;
+  border-radius: 4px;
+  border-left: 3px solid #0078d4;
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.action-btn {
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  min-width: 140px;
+}
+
+.action-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.action-btn.primary {
+  background-color: #0078d4;
+  color: white;
+}
+
+.action-btn.primary:hover {
+  background-color: #106ebe;
+}
+
+.action-btn.secondary {
+  background-color: #6c757d;
+  color: white;
+}
+
+.action-btn.secondary:hover {
+  background-color: #5a6268;
+}
+
+.action-btn.info {
+  background-color: #17a2b8;
+  color: white;
+}
+
+.action-btn.info:hover {
+  background-color: #138496;
+}
+
+.action-btn.warning {
+  background-color: #ffc107;
+  color: #212529;
+}
+
+.action-btn.warning:hover {
+  background-color: #e0a800;
+}
+
+.log-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.clear-btn {
+  padding: 6px 12px;
+  background: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.2s;
+}
+
+.clear-btn:hover {
+  background: #c82333;
+}
+
+.event-log {
+  max-height: 300px;
+  overflow-y: auto;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  background: #f8f9fa;
+}
+
+.log-entry {
+  padding: 8px 12px;
+  border-bottom: 1px solid #e9ecef;
+  font-family: 'Courier New', monospace;
+  font-size: 0.85rem;
+  color: #495057;
+}
+
+.log-entry:last-child {
+  border-bottom: none;
+}
+
+.log-empty {
+  padding: 20px;
+  text-align: center;
+  color: #6c757d;
+  font-style: italic;
+}
+
+.loading-section {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #0078d4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 20px;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-section p {
+  margin: 0 0 8px 0;
+  font-size: 1.1rem;
+  color: #323130;
+}
+
+.loading-section small {
+  color: #6c757d;
+}
+
+/* Responsive design for task pane */
+@media (max-width: 400px) {
+  .app-container {
+    padding: 12px;
+  }
+
+  .app-header {
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+  }
+
+  .button-group {
+    flex-direction: column;
+  }
+
+  .action-btn {
+    width: 100%;
+    min-width: auto;
+  }
+}

@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Outlook Angular Add-in</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+
+  <!-- Content Security Policy for Office Add-ins - More permissive -->
+  <meta http-equiv="Content-Security-Policy" content="
+    default-src 'self' https: data:;
+    script-src 'self' 'unsafe-inline' 'unsafe-eval' https: data:;
+    style-src 'self' 'unsafe-inline' https: data:;
+    img-src 'self' https: data: blob:;
+    connect-src 'self' https: wss: data:;
+    font-src 'self' https: data:;
+    frame-src 'self' https:;
+    media-src 'self' https: data:;
+    object-src 'none';
+  ">
+
+  <!-- Office.js library -->
+  <script type="text/javascript" src="https://appsforoffice.microsoft.com/lib/1/hosted/office.js"></script>
+</head>
+
+<body>
+  <app-root>
+    <div style="padding: 20px; text-align: center;">
+      <h3>Loading Outlook Add-in...</h3>
+      <p>Please wait while the application initializes.</p>
+    </div>
+  </app-root>
+</body>
+
+</html>

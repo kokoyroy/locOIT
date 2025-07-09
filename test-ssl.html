@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>SSL Certificate Test</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    .success {
+      color: green;
+    }
+
+    .error {
+      color: red;
+    }
+
+    .info {
+      color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>SSL Certificate Test</h1>
+  <p class="info">If you can see this page, your SSL certificate is working!</p>
+
+  <h2>Next Steps:</h2>
+  <ol>
+    <li>If you saw a security warning, make sure you clicked "Advanced" → "Proceed to localhost"</li>
+    <li>Now go back to Outlook and try loading your add-in</li>
+    <li>The add-in should now work properly</li>
+  </ol>
+
+  <h2>Test Links:</h2>
+  <ul>
+    <li><a href="https://localhost:4200">Main App</a></li>
+    <li><a href="https://localhost:4200/assets/icon-16.png">Icon 16px</a></li>
+    <li><a href="https://localhost:4200/assets/icon-32.png">Icon 32px</a></li>
+    <li><a href="https://localhost:4200/assets/icon-80.png">Icon 80px</a></li>
+  </ul>
+
+  <script>
+    console.log('✅ SSL Certificate Test Page Loaded Successfully');
+    console.log('🌐 Location:', window.location.href);
+    console.log('🔒 Protocol:', window.location.protocol);
+  </script>
+</body>
+
+</html>

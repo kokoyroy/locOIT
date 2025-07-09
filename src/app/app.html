@@ -1,0 +1,69 @@
+<div class="app-container">
+  <header class="app-header">
+    <h1>{{ title }}</h1>
+    <div class="status-indicator" [class.ready]="isOfficeReady" [class.loading]="!isOfficeReady">
+      {{ isOfficeReady ? '✅ Ready' : '⏳ Loading...' }}
+    </div>
+  </header>
+
+  <main class="app-content">
+    <!-- Debug Information -->
+    <section class="debug-section">
+      <h3>🔍 Debug Information</h3>
+      <div class="debug-info">
+        {{ debugInfo || 'Initializing...' }}
+      </div>
+    </section>
+
+    <!-- Current Email Information -->
+    <section class="email-section" *ngIf="isOfficeReady">
+      <h3>📧 Current Email</h3>
+      <div class="email-info">
+        <p><strong>From/To:</strong> {{ currentEmail }}</p>
+        <p><strong>Subject:</strong> {{ currentSubject }}</p>
+      </div>
+    </section>
+
+    <!-- Action Buttons -->
+    <section class="actions-section" *ngIf="isOfficeReady">
+      <h3>🎮 Actions</h3>
+      <div class="button-group">
+        <button class="action-btn primary" (click)="showSubject()">
+          📄 Show Subject
+        </button>
+        <button class="action-btn secondary" (click)="addCategory()">
+          🏷️ Add Category
+        </button>
+        <button class="action-btn info" (click)="refreshData()">
+          🔄 Refresh Data
+        </button>
+        <button class="action-btn warning" (click)="checkPinningSupport()">
+          📌 Check Pinning Support
+        </button>
+      </div>
+    </section>
+
+    <!-- Event Log -->
+    <section class="log-section" *ngIf="isOfficeReady">
+      <div class="log-header">
+        <h3>📋 Event Log</h3>
+        <button class="clear-btn" (click)="clearEventLog()">Clear</button>
+      </div>
+      <div class="event-log">
+        <div *ngFor="let event of eventLog" class="log-entry">
+          {{ event }}
+        </div>
+        <div *ngIf="eventLog.length === 0" class="log-empty">
+          No events logged yet...
+        </div>
+      </div>
+    </section>
+
+    <!-- Loading State -->
+    <section class="loading-section" *ngIf="!isOfficeReady">
+      <div class="loading-spinner"></div>
+      <p>Initializing Outlook Add-in...</p>
+      <small>This may take a few seconds</small>
+    </section>
+  </main>
+</div>
