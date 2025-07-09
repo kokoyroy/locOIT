@@ -19,6 +19,10 @@ export class AppComponent implements OnInit {
   eventLog: string[] = [];
   debugInfo: string = '';
 
+  // Email collection properties
+  emailCollection: any[] = [];
+  isCollectionMode = false;
+
   constructor(
     private outlookEventsService: OutlookEventsService,
     private ngZone: NgZone,
@@ -27,6 +31,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     console.log('AppComponent initializing...');
     this.initializeOffice();
+    this.subscribeToEmailCollection();
   }
 
   private initializeOffice() {
@@ -262,5 +267,79 @@ export class AppComponent implements OnInit {
     if (this.eventLog.length > 20) {
       this.eventLog = this.eventLog.slice(0, 20);
     }
+  }
+
+  // Email Collection Methods (Drag & Drop Alternative)
+  toggleCollectionMode(): void {
+    this.isCollectionMode = !this.isCollectionMode;
+    this.addToEventLog(
+      `Collection mode ${this.isCollectionMode ? 'enabled' : 'disabled'}`,
+    );
+  }
+
+  async addCurrentEmailToCollection(): Promise<void> {
+    if (!this.isOfficeReady) {
+      alert('Office is not ready yet. Please wait...');
+      return;
+    }
+
+    try {
+      const success =
+        await this.outlookEventsService.addCurrentEmailToCollection();
+      if (success) {
+        this.addToEventLog('Current email added to collection');
+        // Optional: Show visual feedback
+        this.showTemporaryMessage('✅ Email added to collection!');
+      } else {
+        this.addToEventLog('Email already in collection or failed to add');
+        this.showTemporaryMessage('⚠️ Email already in collection');
+      }
+    } catch (error) {
+      console.error('Error adding email to collection:', error);
+      this.addToEventLog(`Error adding email: ${error}`);
+    }
+  }
+
+  removeEmailFromCollection(emailId: string): void {
+    this.outlookEventsService.removeEmailFromCollection(emailId);
+    this.addToEventLog(`Email removed from collection: ${emailId}`);
+  }
+
+  clearEmailCollection(): void {
+    this.outlookEventsService.clearEmailCollection();
+    this.addToEventLog('Email collection cleared');
+  }
+
+  processEmailCollection(): void {
+    if (this.emailCollection.length === 0) {
+      alert('No emails in collection to process');
+      return;
+    }
+
+    this.outlookEventsService.processEmailCollection();
+    this.addToEventLog(`Processing ${this.emailCollection.length} emails`);
+
+    // Add your processing logic here
+    alert(
+      `Processing ${this.emailCollection.length} emails. Check console for details.`,
+    );
+  }
+
+  private showTemporaryMessage(message: string): void {
+    // Simple temporary message - you can enhance this with a proper toast/notification
+    const originalTitle = this.title;
+    this.title = message;
+    setTimeout(() => {
+      this.title = originalTitle;
+    }, 2000);
+  }
+
+  private subscribeToEmailCollection(): void {
+    this.outlookEventsService.emailCollection$.subscribe((emails) => {
+      this.ngZone.run(() => {
+        this.emailCollection = emails;
+        this.addToEventLog(`Email collection updated: ${emails.length} emails`);
+      });
+    });
   }
 }

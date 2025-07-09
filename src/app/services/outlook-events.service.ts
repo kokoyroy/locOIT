@@ -1,10 +1,25 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
+
+export interface EmailItem {
+  id: string;
+  subject: string;
+  from: string;
+  to: string;
+  dateReceived: Date;
+  conversationId?: string;
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class OutlookEventsService {
   private isInitialized = false;
+  private emailCollection: EmailItem[] = [];
+  private emailCollectionSubject = new BehaviorSubject<EmailItem[]>([]);
+
+  // Observable for components to subscribe to email collection changes
+  public emailCollection$ = this.emailCollectionSubject.asObservable();
 
   constructor() {
     // Delay initialization to ensure Office.js is loaded
@@ -180,6 +195,82 @@ export class OutlookEventsService {
       console.error('❌ Error getting selected items:', error);
       this.logCurrentItemInfo();
     }
+  }
+
+  // Method to add currently selected email to collection
+  public addCurrentEmailToCollection(): Promise<boolean> {
+    return new Promise((resolve) => {
+      try {
+        if (typeof Office !== 'undefined' && Office.context?.mailbox?.item) {
+          const item = Office.context.mailbox.item;
+
+          const emailItem: EmailItem = {
+            id: item.itemId || `temp-${Date.now()}`,
+            subject: item.subject || 'No Subject',
+            from: item.from?.emailAddress || 'Unknown Sender',
+            to: Array.isArray(item.to)
+              ? item.to.map((t) => t.emailAddress).join(', ')
+              : 'Unknown',
+            dateReceived: item.dateTimeCreated || new Date(),
+            conversationId: (item as any).conversationId,
+          };
+
+          // Check if email already exists in collection
+          const exists = this.emailCollection.some(
+            (email) => email.id === emailItem.id,
+          );
+
+          if (!exists) {
+            this.emailCollection.push(emailItem);
+            this.emailCollectionSubject.next([...this.emailCollection]);
+            console.log('✅ Email added to collection:', emailItem.subject);
+            resolve(true);
+          } else {
+            console.log('⚠️ Email already in collection');
+            resolve(false);
+          }
+        } else {
+          console.warn('⚠️ No email selected or Office.js not available');
+          resolve(false);
+        }
+      } catch (error) {
+        console.error('❌ Error adding email to collection:', error);
+        resolve(false);
+      }
+    });
+  }
+
+  // Method to remove email from collection
+  public removeEmailFromCollection(emailId: string): void {
+    this.emailCollection = this.emailCollection.filter(
+      (email) => email.id !== emailId,
+    );
+    this.emailCollectionSubject.next([...this.emailCollection]);
+    console.log('🗑️ Email removed from collection');
+  }
+
+  // Method to clear entire collection
+  public clearEmailCollection(): void {
+    this.emailCollection = [];
+    this.emailCollectionSubject.next([]);
+    console.log('🧹 Email collection cleared');
+  }
+
+  // Method to get collection count
+  public getCollectionCount(): number {
+    return this.emailCollection.length;
+  }
+
+  // Method to get all emails in collection
+  public getEmailCollection(): EmailItem[] {
+    return [...this.emailCollection];
+  }
+
+  // Method to process all emails in collection
+  public processEmailCollection(): void {
+    console.log('⚙️ Processing email collection:', this.emailCollection);
+    // Add your processing logic here
+    // For example: analyze emails, export data, apply actions, etc.
   }
 
   // Method to check if service is initialized

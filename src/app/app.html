@@ -43,6 +43,60 @@
       </div>
     </section>
 
+    <!-- Email Collection Section (Drag & Drop Alternative) -->
+    <section class="collection-section" *ngIf="isOfficeReady">
+      <div class="collection-header">
+        <h3>📦 Email Collection (Drag & Drop Alternative)</h3>
+        <button class="toggle-btn" [class.active]="isCollectionMode" (click)="toggleCollectionMode()">
+          {{ isCollectionMode ? '🔓 Collection Mode ON' : '🔒 Collection Mode OFF' }}
+        </button>
+      </div>
+
+      <!-- Instructions -->
+      <div class="collection-info" *ngIf="isCollectionMode">
+        <p><strong>📋 How to use:</strong></p>
+        <ol>
+          <li>Select an email in Outlook</li>
+          <li>Click "Add Selected Email" button below</li>
+          <li>Repeat for multiple emails</li>
+          <li>Process all collected emails at once</li>
+        </ol>
+      </div>
+
+      <!-- Collection Controls -->
+      <div class="collection-controls" *ngIf="isCollectionMode">
+        <button class="action-btn primary" (click)="addCurrentEmailToCollection()">
+          ➕ Add Selected Email
+        </button>
+        <button class="action-btn warning" (click)="processEmailCollection()" [disabled]="emailCollection.length === 0">
+          ⚙️ Process All ({{ emailCollection.length }})
+        </button>
+        <button class="action-btn danger" (click)="clearEmailCollection()" [disabled]="emailCollection.length === 0">
+          🗑️ Clear All
+        </button>
+      </div>
+
+      <!-- Email Collection Display -->
+      <div class="email-list" *ngIf="isCollectionMode && emailCollection.length > 0">
+        <h4>📬 Collected Emails ({{ emailCollection.length }})</h4>
+        <div class="email-item" *ngFor="let email of emailCollection; let i = index">
+          <div class="email-info">
+            <div class="email-subject">{{ email.subject || 'No Subject' }}</div>
+            <div class="email-from">From: {{ email.from || 'Unknown' }}</div>
+            <div class="email-date">{{ email.dateReceived | date:'short' }}</div>
+          </div>
+          <button class="remove-btn" (click)="removeEmailFromCollection(email.id)">
+            ❌
+          </button>
+        </div>
+      </div>
+
+      <!-- Empty State -->
+      <div class="empty-collection" *ngIf="isCollectionMode && emailCollection.length === 0">
+        <p>📭 No emails collected yet. Select an email in Outlook and click "Add Selected Email".</p>
+      </div>
+    </section>
+
     <!-- Event Log -->
     <section class="log-section" *ngIf="isOfficeReady">
       <div class="log-header">
